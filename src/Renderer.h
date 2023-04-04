@@ -4,16 +4,15 @@
 #include "defs.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
-#include <list>
 
-class DrawingManager {
+class Renderer {
     private:
         SDL_Renderer *renderer;
         SDL_Window *window;
         TTF_Font *fonts[3];
     public:
-        DrawingManager();
-        ~DrawingManager();
+        Renderer();
+        ~Renderer();
         bool initialize();
         void clearScene();
         void renderScene();

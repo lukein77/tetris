@@ -8,10 +8,10 @@ Figure::Figure(position_t b1, position_t b2, position_t b3, position_t b4, SDL_C
     _blocks[3] = b4;
 }
 
-void Figure::draw(DrawingManager &drawingManager)
+void Figure::draw(Renderer &renderer)
 {
     for (int i = 0; i < 4; i++) {
-        drawingManager.drawSquare(_pos.x + _blocks[i].x, _pos.y + _blocks[i].y, _color, true);
+        renderer.drawSquare(_pos.x + _blocks[i].x, _pos.y + _blocks[i].y, _color, true);
     }
 }
 

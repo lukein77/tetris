@@ -1,14 +1,14 @@
-#include "DrawingManager.h"
+#include "Renderer.h"
 
-DrawingManager::DrawingManager() {}
+Renderer::Renderer() {}
 
-DrawingManager::~DrawingManager() {
+Renderer::~Renderer() {
     TTF_Quit();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 }
 
-bool DrawingManager::initialize() {
+bool Renderer::initialize() {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         printf("Couldn't initialize SDL: %s\n", SDL_GetError());
         return false;
@@ -42,18 +42,18 @@ bool DrawingManager::initialize() {
     return true;
 }
 
-void DrawingManager::clearScene() {
+void Renderer::clearScene() {
     // clear everything
     SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
     SDL_RenderClear(renderer);
 }
 
-void DrawingManager::renderScene() {
+void Renderer::renderScene() {
     // render everything
     SDL_RenderPresent(renderer);
 }
 
-void DrawingManager::drawSquare(int x, int y, SDL_Color color, bool fill) {
+void Renderer::drawSquare(int x, int y, SDL_Color color, bool fill) {
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
     
     SDL_Rect r;
@@ -69,7 +69,7 @@ void DrawingManager::drawSquare(int x, int y, SDL_Color color, bool fill) {
     }
 }
 
-void DrawingManager::blit(Texture *texture, int x, int y) {
+void Renderer::blit(Texture *texture, int x, int y) {
 	
 	texture->rect.x = x;
 	texture->rect.y = y;
@@ -77,7 +77,7 @@ void DrawingManager::blit(Texture *texture, int x, int y) {
 	SDL_RenderCopy(renderer, texture->image, NULL, &(texture->rect));
 }
 
-void DrawingManager::renderText(const char *text, int x, int y, int size, SDL_Color color, bool centered) {
+void Renderer::renderText(const char *text, int x, int y, int size, SDL_Color color, bool centered) {
 
 	SDL_Surface *surface = TTF_RenderText_Solid(fonts[size], text, color);
 
