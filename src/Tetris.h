@@ -12,6 +12,7 @@ class Tetris {
     private:
         Renderer renderer;
         bool running;
+        Figure *fig;
 
         void handleEvents();
         void handleKeyDown(SDL_Scancode keycode);

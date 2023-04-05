@@ -16,10 +16,17 @@ Tetris::~Tetris()
 
 void Tetris::mainLoop()
 {
+    fig = new LFigure;
+    unsigned int framesPassed = 0;
     while (running) {
         Uint64 start = SDL_GetTicks64();
 
         handleEvents();
+
+
+        if (framesPassed % 12 == 0) {
+            fig->update();
+        }
 
         renderer.clearScene();
 
@@ -29,6 +36,8 @@ void Tetris::mainLoop()
                 renderer.drawSquare(i, j, {0x5A, 0x5A, 0x5A, 0xFF});
             }
         }
+        fig->draw(renderer);
+
         renderer.renderScene();
 
         // fps
@@ -36,6 +45,7 @@ void Tetris::mainLoop()
         if (timePassed < 1000 / 60.0) {
             SDL_Delay(1000 / 60.0 - timePassed);
         }
+        framesPassed++;
     }
 }
 
@@ -50,6 +60,14 @@ void Tetris::handleEvents()
                 break;
             case SDL_KEYDOWN:
                 handleKeyDown(event.key.keysym.scancode);
+                break;
+            case SDL_KEYUP:
+                switch (event.key.keysym.scancode) {
+                    case SDL_SCANCODE_LCTRL:
+                        fig->rotate();
+                        break;
+                }
+                break;
             default:
                 break;
         }
@@ -61,6 +79,18 @@ void Tetris::handleKeyDown(SDL_Scancode keycode)
     switch (keycode) {
         case SDL_SCANCODE_ESCAPE:
             running = false;
+            break;
+        case SDL_SCANCODE_UP:
+            fig->move(0,-1);
+            break;
+        case SDL_SCANCODE_DOWN:
+            fig->move(0,1);
+            break;
+        case SDL_SCANCODE_LEFT:
+            fig->move(-1,0);
+            break;
+        case SDL_SCANCODE_RIGHT:
+            fig->move(1,0);
             break;
         default:
             break;

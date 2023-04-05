@@ -3,18 +3,20 @@
 
 #include "defs.h"
 #include "Renderer.h"
-
+#include "Block.h"
 
 class Figure {
     protected:
         position_t _pos;
-        position_t _blocks[4];
+        Block _blocks[4];
         SDL_Color _color;
     public:
         Figure(position_t b1, position_t b2, position_t b3, position_t b4, SDL_Color color);
         ~Figure() {}
         void draw(Renderer &renderer);
-        void rotate(bool clockwise);
+        void rotate();
+        void move(int dx, int dy);
+        void update();
 };
 
 class Square : public Figure {
@@ -24,27 +26,27 @@ class Square : public Figure {
 
 class Line : public Figure {
     public:
-        Line() : Figure({-2,0}, {-1,0}, {0,0}, {1,0}, COLOR_BLUE) {}
+        Line() : Figure({0,0}, {-2,0}, {-1,0}, {1,0}, COLOR_BLUE) {}
 };
 
 class JFigure : public Figure {
     public:
-        JFigure() : Figure({0,-2}, {0,-1}, {0,0}, {-1,0}, COLOR_BLUE) {}
+        JFigure() : Figure({0,0}, {0,-2}, {0,-1}, {-1,0}, COLOR_BLUE) {}
 };
 
 class LFigure : public Figure {
     public:
-        LFigure() : Figure({0,-2}, {0,-1}, {0,0}, {1,0}, COLOR_BLUE) {}
+        LFigure() : Figure({0,0}, {0,-2}, {0,-1}, {1,0}, COLOR_BLUE) {}
 };
 
 class SFigure : public Figure {
     public:
-        SFigure() : Figure({-1,0}, {0,0}, {0,-1}, {1,-1}, COLOR_BLUE) {}
+        SFigure() : Figure({0,0}, {-1,0}, {0,-1}, {1,-1}, COLOR_BLUE) {}
 };
 
 class ZFigure : public Figure {
     public:
-        ZFigure() : Figure({-1,-1}, {0,-1}, {0,0}, {1,0}, COLOR_BLUE) {}
+        ZFigure() : Figure({0,0}, {-1,-1}, {0,-1}, {1,0}, COLOR_BLUE) {}
 };
 
 

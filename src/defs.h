@@ -4,11 +4,13 @@
 #include <SDL2/SDL.h>
 
 #define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 640
+#define SCREEN_HEIGHT 600
 
 #define GRID_WIDTH 10
 #define GRID_HEIGHT 20
 #define BLOCK_SIZE 30
+#define INIT_X 5
+#define INIT_Y 1
 
 #define COLOR_RED       {0x8B, 0x00, 0x00, 0xFF}
 #define COLOR_BLUE      {0x00, 0x00, 0x8B, 0xFF}
@@ -24,6 +26,12 @@ typedef struct position_t {
     int y;
     position_t() {}
     position_t(int x, int y) : x(x), y(y) {}
+    position_t operator+(const position_t& p) {
+        return position_t(this->x + p.x, this->y + p.y);
+    }
+    position_t operator-(const position_t& p) {
+        return position_t(this->x - p.x, this->y - p.y);
+    }
 } position_t;
 
 typedef struct Texture {
