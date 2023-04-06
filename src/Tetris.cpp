@@ -21,7 +21,7 @@ Tetris::Tetris()
 
 Tetris::~Tetris()
 {
-    // deallocate grid
+    // deallocate memory for grid matrix and keys array
     for (int i = 0; i < GRID_HEIGHT; i++) {
         delete[] grid[i];
     }
@@ -44,6 +44,7 @@ void Tetris::mainLoop()
 
         handleEvents();
 
+        handleInput();
 
         if (framesPassed % 15 == 0) {
             updateAll();
@@ -73,19 +74,26 @@ void Tetris::handleEvents()
             case SDL_QUIT:
                 running = false;
                 break;
-            case SDL_KEYDOWN:
-                handleKeyDown(event.key.keysym.scancode);
-                break;
-            case SDL_KEYUP:
-                switch (event.key.keysym.scancode) {
-                    case SDL_SCANCODE_LCTRL:
-                        active_figure->rotate(grid);
-                        break;
-                }
-                break;
             default:
                 break;
         }
+    }
+}
+
+void Tetris::handleInput()
+{
+    const Uint8 *keyboard = SDL_GetKeyboardState(NULL);
+    if (keyboard[SDL_SCANCODE_UP]) {
+        active_figure->rotate(grid);
+    }
+    else if (keyboard[SDL_SCANCODE_LEFT]) {
+        active_figure->move(-1,0, grid);
+    }
+    else if (keyboard[SDL_SCANCODE_RIGHT]) {
+        active_figure->move(1,0, grid);
+    }
+    else if (keyboard[SDL_SCANCODE_DOWN]) {
+        active_figure->move(0,1, grid);
     }
 }
 
@@ -118,9 +126,17 @@ void Tetris::updateAll()
     if (active_figure->isLanding()) {
         active_figure->setBlocks(grid);
         addFigure();
-        std::cout << grid[5][19] << std::endl;
     }
 }
+
+void Tetris::drawAll()
+{
+    renderer.drawGrid();
+    for (Figure *f : figures) {
+        f->draw(renderer);
+    }
+}
+
 
 void Tetris::addFigure()
 {
@@ -148,13 +164,5 @@ void Tetris::addFigure()
     }
     figures.push_front(new_figure);
     active_figure = figures.front();
-}
-
-void Tetris::drawAll()
-{
-    renderer.drawGrid();
-    for (Figure *f : figures) {
-        f->draw(renderer);
-    }
 }
 

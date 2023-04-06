@@ -17,6 +17,7 @@ class Tetris {
         bool **grid;
 
         void handleEvents();
+        void handleInput();
         void handleKeyDown(SDL_Scancode keycode);
         void drawAll();
         void updateAll();
