@@ -69,6 +69,15 @@ void Renderer::drawSquare(int x, int y, SDL_Color color, bool fill) {
     }
 }
 
+void Renderer::drawGrid() {
+    // grid
+    for (int i = 0; i < GRID_WIDTH; i++) {
+        for (int j = 0; j < GRID_HEIGHT; j++) {
+            drawSquare(i, j, {0x5A, 0x5A, 0x5A, 0xFF});
+        }
+    }
+}
+
 void Renderer::blit(Texture *texture, int x, int y) {
 	
 	texture->rect.x = x;

@@ -17,6 +17,7 @@ class Renderer {
         void clearScene();
         void renderScene();
         void drawSquare(int x, int y, SDL_Color color, bool fill=false);
+        void drawGrid();
         void blit(Texture *texture, int x, int y);
         void renderText(const char *text, int x, int y, int size, SDL_Color color, bool centered=false);
 };

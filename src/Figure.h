@@ -10,13 +10,16 @@ class Figure {
         position_t _pos;
         Block _blocks[4];
         SDL_Color _color;
+        bool _landing;
     public:
         Figure(position_t b1, position_t b2, position_t b3, position_t b4, SDL_Color color);
         ~Figure() {}
         void draw(Renderer &renderer);
-        void rotate();
-        void move(int dx, int dy);
-        void update();
+        void rotate(bool **grid);
+        void move(int dx, int dy, bool **grid);
+        void update(bool **grid);
+        bool isLanding() const { return _landing; }
+        void setBlocks(bool **grid);
 };
 
 class Square : public Figure {
@@ -31,22 +34,22 @@ class Line : public Figure {
 
 class JFigure : public Figure {
     public:
-        JFigure() : Figure({0,0}, {0,-2}, {0,-1}, {-1,0}, COLOR_BLUE) {}
+        JFigure() : Figure({0,0}, {0,-2}, {0,-1}, {-1,0}, COLOR_PURPLE) {}
 };
 
 class LFigure : public Figure {
     public:
-        LFigure() : Figure({0,0}, {0,-2}, {0,-1}, {1,0}, COLOR_BLUE) {}
+        LFigure() : Figure({0,0}, {0,-2}, {0,-1}, {1,0}, COLOR_YELLOW) {}
 };
 
 class SFigure : public Figure {
     public:
-        SFigure() : Figure({0,0}, {-1,0}, {0,-1}, {1,-1}, COLOR_BLUE) {}
+        SFigure() : Figure({0,0}, {-1,0}, {0,-1}, {1,-1}, COLOR_ORANGE) {}
 };
 
 class ZFigure : public Figure {
     public:
-        ZFigure() : Figure({0,0}, {-1,-1}, {0,-1}, {1,0}, COLOR_BLUE) {}
+        ZFigure() : Figure({0,0}, {-1,-1}, {0,-1}, {1,0}, COLOR_GREEN) {}
 };
 
 

@@ -22,9 +22,9 @@ position_t Block::rotate(position_t pivot)
     return position_t(new_pos.x - _x, new_pos.y - _y);
 }
 
-bool Block::checkCollision(int dx, int dy)
+bool Block::checkCollision(int dx, int dy, bool **grid)
 {
     int new_x = _x + dx;
     int new_y = _y + dy;
-    return ((new_x < 0 || new_x > GRID_WIDTH-1) || (new_y < 0 || new_y > GRID_HEIGHT-1));
+    return ( ((new_x < 0 || new_x > GRID_WIDTH-1) || (new_y < 0 || new_y > GRID_HEIGHT-1)) || (grid[new_x][new_y]) );
 }

@@ -15,7 +15,7 @@ class Block {
         Block() {}
         Block(int x, int y, SDL_Color color) : _x(x), _y(y), _color(color) {}
         ~Block() {}
-        bool checkCollision(int dx, int dy);
+        bool checkCollision(int dx, int dy, bool **grid);
         void move(int dx, int dy);
         void draw(Renderer &renderer);
         void setPosition(position_t pos) { _x = pos.x; _y = pos.y; }

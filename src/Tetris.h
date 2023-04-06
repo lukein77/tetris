@@ -6,16 +6,21 @@
 #include "defs.h"
 #include "Renderer.h"
 #include "Figure.h"
-#include <string>
+#include <list>
 
 class Tetris {
     private:
         Renderer renderer;
         bool running;
-        Figure *fig;
+        std::list<Figure*> figures;
+        Figure* active_figure;
+        bool **grid;
 
         void handleEvents();
         void handleKeyDown(SDL_Scancode keycode);
+        void drawAll();
+        void updateAll();
+        void addFigure();
     public:
         Tetris();
         ~Tetris();
