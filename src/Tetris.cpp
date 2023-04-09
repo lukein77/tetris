@@ -17,6 +17,8 @@ Tetris::Tetris()
     for (int i = 0; i < GRID_HEIGHT; i++) {
         grid[i] = new bool[GRID_WIDTH];
     }
+
+    points = 0;
 }
 
 Tetris::~Tetris()
@@ -108,6 +110,32 @@ void Tetris::updateAll()
     if (active_figure->isLanding()) {
         active_figure->setBlocks(grid);
         addFigure();
+    }
+}
+
+void Tetris::checkLines()
+{
+    int total_lines = 0;
+    bool full_line = true;
+    for (int i = GRID_HEIGHT-1; i >= 0; i--) {
+        // check if line is full
+
+        for (int j = 0; j < GRID_WIDTH; j++) {
+            if (!grid[i][j]) {
+                full_line = false;
+                break;
+            }
+        }
+
+        if (!full_line) {
+            if (total_lines > 0) {
+                for (int j = 0; j < GRID_WIDTH; j++) {
+                    grid[i-total_lines][j] = grid[i][j];
+                }
+            }
+        } else {
+            total_lines++;
+        }
     }
 }
 

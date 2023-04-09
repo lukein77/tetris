@@ -10,10 +10,11 @@ class Block {
         int _x;
         int _y;
         SDL_Color _color;
+        bool _alive;
 
     public:
         Block() {}
-        Block(int x, int y, SDL_Color color) : _x(x), _y(y), _color(color) {}
+        Block(int x, int y, SDL_Color color) : _x(x), _y(y), _color(color), _alive(true) {}
         ~Block() {}
         bool checkCollision(int dx, int dy, bool **grid);
         void move(int dx, int dy);

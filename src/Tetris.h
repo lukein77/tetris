@@ -15,12 +15,14 @@ class Tetris {
         std::list<Figure*> figures;
         Figure* active_figure;
         bool **grid;
+        int points;
 
         void handleEvents();
         void handleInput();
         void drawAll();
         void updateAll();
         void addFigure();
+        void checkLines();
     public:
         Tetris();
         ~Tetris();
