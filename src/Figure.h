@@ -4,11 +4,12 @@
 #include "defs.h"
 #include "Renderer.h"
 #include "Block.h"
+#include <vector>
 
 class Figure {
     protected:
         position_t _pos;
-        Block _blocks[4];
+        std::vector<Block*> _blocks;
         SDL_Color _color;
         bool _landing;
     public:

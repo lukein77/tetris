@@ -128,13 +128,14 @@ void Tetris::checkLines()
         }
 
         if (!full_line) {
+            // if line is not full, move that line down as many times as lines filled previously
             if (total_lines > 0) {
                 for (int j = 0; j < GRID_WIDTH; j++) {
                     grid[i-total_lines][j] = grid[i][j];
                 }
             }
         } else {
-            total_lines++;
+            total_lines++;  // count full line and move to the next
         }
     }
 }
