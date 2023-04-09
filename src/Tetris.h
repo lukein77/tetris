@@ -18,7 +18,6 @@ class Tetris {
 
         void handleEvents();
         void handleInput();
-        void handleKeyDown(SDL_Scancode keycode);
         void drawAll();
         void updateAll();
         void addFigure();

@@ -21,7 +21,7 @@ Tetris::Tetris()
 
 Tetris::~Tetris()
 {
-    // deallocate memory for grid matrix and keys array
+    // deallocate memory for grid matrix
     for (int i = 0; i < GRID_HEIGHT; i++) {
         delete[] grid[i];
     }
@@ -44,7 +44,9 @@ void Tetris::mainLoop()
 
         handleEvents();
 
-        handleInput();
+        if (framesPassed % 5 == 0) {
+            handleInput();
+        }
 
         if (framesPassed % 15 == 0) {
             updateAll();
@@ -83,6 +85,9 @@ void Tetris::handleEvents()
 void Tetris::handleInput()
 {
     const Uint8 *keyboard = SDL_GetKeyboardState(NULL);
+    if (keyboard[SDL_SCANCODE_ESCAPE]) {
+        running = false;
+    }
     if (keyboard[SDL_SCANCODE_UP]) {
         active_figure->rotate(grid);
     }
@@ -94,29 +99,6 @@ void Tetris::handleInput()
     }
     else if (keyboard[SDL_SCANCODE_DOWN]) {
         active_figure->move(0,1, grid);
-    }
-}
-
-void Tetris::handleKeyDown(SDL_Scancode keycode)
-{
-    switch (keycode) {
-        case SDL_SCANCODE_ESCAPE:
-            running = false;
-            break;
-        case SDL_SCANCODE_UP:
-            active_figure->rotate(grid);
-            break;
-        case SDL_SCANCODE_DOWN:
-            active_figure->move(0,1, grid);
-            break;
-        case SDL_SCANCODE_LEFT:
-            active_figure->move(-1,0, grid);
-            break;
-        case SDL_SCANCODE_RIGHT:
-            active_figure->move(1,0, grid);
-            break;
-        default:
-            break;
     }
 }
 
@@ -140,7 +122,7 @@ void Tetris::drawAll()
 
 void Tetris::addFigure()
 {
-    int random = rand() % 6;
+    int random = rand() % 7;
     Figure *new_figure;
     switch (random) {
         case 0:
@@ -160,6 +142,9 @@ void Tetris::addFigure()
             break;
         case 5:
             new_figure = new ZFigure();
+            break;
+        case 6:
+            new_figure = new TFigure();
             break;
     }
     figures.push_front(new_figure);

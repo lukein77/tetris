@@ -44,12 +44,17 @@ class LFigure : public Figure {
 
 class SFigure : public Figure {
     public:
-        SFigure() : Figure({0,0}, {-1,0}, {0,-1}, {1,-1}, COLOR_ORANGE) {}
+        SFigure() : Figure({0,0}, {-1,0}, {0,-1}, {1,-1}, COLOR_LIGHTBLUE) {}
 };
 
 class ZFigure : public Figure {
     public:
         ZFigure() : Figure({0,0}, {-1,-1}, {0,-1}, {1,0}, COLOR_GREEN) {}
+};
+
+class TFigure : public Figure {
+    public:
+        TFigure() : Figure({0,0}, {-1,0}, {0,-1}, {1,0}, COLOR_ORANGE) {}
 };
 
 
