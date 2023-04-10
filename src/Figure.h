@@ -17,6 +17,7 @@ class Figure {
         Figure(position_t b1, position_t b2, position_t b3, position_t b4, SDL_Color color);
         ~Figure();
         void draw(Renderer &renderer);
+        void drawAsNext(Renderer &renderer);
         void rotate(Block ***grid);
         void move(int dx, int dy, Block ***grid);
         void update(Block ***grid);

@@ -28,6 +28,13 @@ void Figure::draw(Renderer &renderer)
     }
 }
 
+void Figure::drawAsNext(Renderer &renderer)
+{
+    for (Block *b : _blocks) {
+        b->drawAsNext(renderer);
+    }
+}
+
 void Figure::rotate(Block ***grid)
 {
     position_t pivot = _blocks.at(0)->getPosition();

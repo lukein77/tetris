@@ -97,6 +97,11 @@ void Tetris::handleEvents()
             case SDL_QUIT:
                 running = false;
                 break;
+            case SDL_KEYUP:
+                if (event.key.keysym.scancode == SDL_SCANCODE_UP) {
+                    active_figure->rotate(grid);
+                }
+                break;
             default:
                 break;
         }
@@ -109,10 +114,7 @@ void Tetris::handleInput()
     if (keyboard[SDL_SCANCODE_ESCAPE]) {
         running = false;
     }
-    if (keyboard[SDL_SCANCODE_UP]) {
-        active_figure->rotate(grid);
-    }
-    else if (keyboard[SDL_SCANCODE_LEFT]) {
+    if (keyboard[SDL_SCANCODE_LEFT]) {
         active_figure->move(-1,0, grid);
     }
     else if (keyboard[SDL_SCANCODE_RIGHT]) {
@@ -197,7 +199,7 @@ void Tetris::drawAll()
     renderer.renderText("SCORE", 470, 150, FONTSIZE_DEFAULT, COLOR_WHITE, true);
     renderer.renderText(std::to_string(points), 470, 200, FONTSIZE_DEFAULT, COLOR_WHITE, true);
     renderer.renderText("NEXT", 470, 300, FONTSIZE_DEFAULT, COLOR_WHITE, true);
-
+    next_figure->drawAsNext(renderer);
 }
 
 Figure *Tetris::randomFigure()

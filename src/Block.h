@@ -19,6 +19,7 @@ class Block {
         bool checkCollision(int dx, int dy, Block ***grid);
         void move(int dx, int dy);
         void draw(Renderer &renderer);
+        void drawAsNext(Renderer &renderer);
         void erase() { _alive = false; }
         void setPosition(int x, int y) { _x = x; _y = y;}
         position_t getPosition() const { return position_t(_x, _y); }

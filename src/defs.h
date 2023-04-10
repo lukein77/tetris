@@ -11,6 +11,8 @@
 #define BLOCK_SIZE 30
 #define INIT_X 5
 #define INIT_Y 1
+#define NEXTFIGURE_OFFSET_X 10
+#define NEXTFIGURE_OFFSET_Y 13
 
 #define COLOR_WHITE     {0xFF, 0xFF, 0xFF, 0xFF}
 #define COLOR_RED       {0xF2, 0x00, 0x00, 0xFF}

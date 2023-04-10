@@ -11,6 +11,11 @@ void Block::draw(Renderer &renderer)
     renderer.drawSquare(_x, _y, _color, true);
 }
 
+void Block::drawAsNext(Renderer &renderer)
+{
+    renderer.drawSquare(_x + NEXTFIGURE_OFFSET_X, _y + NEXTFIGURE_OFFSET_Y, _color, true);
+}
+
 position_t Block::rotate(position_t pivot)
 {
     position_t new_pos(_x - pivot.x, _y - pivot.y);
