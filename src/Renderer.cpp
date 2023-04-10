@@ -34,9 +34,9 @@ bool Renderer::initialize() {
 		printf("Failed to initialize SDL_ttf: %s\n", TTF_GetError());
 		return false;
 	} else {
-		fonts[FONTSIZE_DEFAULT] = TTF_OpenFont("data/PressStart2P.ttf", 15);
-        fonts[FONTSIZE_SMALL] = TTF_OpenFont("data/PressStart2P.ttf", 12);
-        fonts[FONTSIZE_LARGE] = TTF_OpenFont("data/PressStart2P.ttf", 18);
+		fonts[FONTSIZE_DEFAULT] = TTF_OpenFont("data/PressStart2P.ttf", 18);
+        fonts[FONTSIZE_SMALL] = TTF_OpenFont("data/PressStart2P.ttf", 14);
+        fonts[FONTSIZE_LARGE] = TTF_OpenFont("data/PressStart2P.ttf", 36);
 	}
     
     return true;
@@ -86,9 +86,9 @@ void Renderer::blit(Texture *texture, int x, int y) {
 	SDL_RenderCopy(renderer, texture->image, NULL, &(texture->rect));
 }
 
-void Renderer::renderText(const char *text, int x, int y, int size, SDL_Color color, bool centered) {
+void Renderer::renderText(std::string text, int x, int y, int size, SDL_Color color, bool centered) {
 
-	SDL_Surface *surface = TTF_RenderText_Solid(fonts[size], text, color);
+	SDL_Surface *surface = TTF_RenderText_Solid(fonts[size], text.c_str(), color);
 
 	if (surface) {
 		Texture texture;

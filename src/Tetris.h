@@ -13,8 +13,9 @@ class Tetris {
         Renderer renderer;
         bool running;
         std::list<Figure*> figures;
-        Figure* active_figure;
-        bool **grid;
+        Figure *active_figure;
+        Figure *next_figure;
+        Block ***grid;
         int points;
 
         void handleEvents();
@@ -23,6 +24,7 @@ class Tetris {
         void updateAll();
         void addFigure();
         void checkLines();
+        Figure *randomFigure();
     public:
         Tetris();
         ~Tetris();

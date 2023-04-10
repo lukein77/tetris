@@ -4,22 +4,27 @@
 #include "defs.h"
 #include "Renderer.h"
 #include "Block.h"
+#include <vector>
 
 class Figure {
     protected:
         position_t _pos;
-        Block _blocks[4];
+        std::vector<Block*> _blocks;
         SDL_Color _color;
         bool _landing;
+        bool _alive;
     public:
         Figure(position_t b1, position_t b2, position_t b3, position_t b4, SDL_Color color);
-        ~Figure() {}
+        ~Figure();
         void draw(Renderer &renderer);
-        void rotate(bool **grid);
-        void move(int dx, int dy, bool **grid);
-        void update(bool **grid);
+        void drawAsNext(Renderer &renderer);
+        void rotate(Block ***grid);
+        void move(int dx, int dy, Block ***grid);
+        void update(Block ***grid);
+        void checkDeadBlocks();
         bool isLanding() const { return _landing; }
-        void setBlocks(bool **grid);
+        bool isAlive() const { return _alive; }
+        void setBlocks(Block ***grid);
 };
 
 class Square : public Figure {

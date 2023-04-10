@@ -4,54 +4,70 @@
 Figure::Figure(position_t b1, position_t b2, position_t b3, position_t b4, SDL_Color color) :
     _pos(INIT_X, INIT_Y),
     _landing(false),
+    _alive(true),
     _blocks {
-        Block(b1.x+INIT_X, b1.y+INIT_Y, color),
-        Block(b2.x+INIT_X, b2.y+INIT_Y, color),
-        Block(b3.x+INIT_X, b3.y+INIT_Y, color),
-        Block(b4.x+INIT_X, b4.y+INIT_Y, color)
+        new Block(b1.x+INIT_X, b1.y+INIT_Y, color),
+        new Block(b2.x+INIT_X, b2.y+INIT_Y, color),
+        new Block(b3.x+INIT_X, b3.y+INIT_Y, color),
+        new Block(b4.x+INIT_X, b4.y+INIT_Y, color)
     }
 {}
 
+Figure::~Figure()
+{
+    for (Block *b : _blocks) {
+        delete b;
+    }
+    _blocks.clear();
+}
+
 void Figure::draw(Renderer &renderer)
 {
-    for (int i = 0; i < 4; i++) {
-        _blocks[i].draw(renderer);
+    for (Block *b : _blocks) {
+        b->draw(renderer);
     }
 }
 
-void Figure::rotate(bool **grid)
+void Figure::drawAsNext(Renderer &renderer)
 {
-    position_t pivot = _blocks[0].getPosition();
+    for (Block *b : _blocks) {
+        b->drawAsNext(renderer);
+    }
+}
+
+void Figure::rotate(Block ***grid)
+{
+    position_t pivot = _blocks.at(0)->getPosition();
     position_t rotated_pos[3];
     for (int i = 1; i < 4; i++) {
-        rotated_pos[i-1] = _blocks[i].rotate(pivot);
+        rotated_pos[i-1] = _blocks.at(i)->rotate(pivot);
     }
     bool collide = false;
     for (int i = 1; i < 4; i++) {
-        if (_blocks[i].checkCollision(rotated_pos[i-1].x, rotated_pos[i-1].y, grid)) {
+        if (_blocks.at(i)->checkCollision(rotated_pos[i-1].x, rotated_pos[i-1].y, grid)) {
             collide = true;
             break;
         }
     }
     if (!collide) {
         for (int i = 1; i < 4; i++) {
-            _blocks[i].move(rotated_pos[i-1].x, rotated_pos[i-1].y);
+            _blocks.at(i)->move(rotated_pos[i-1].x, rotated_pos[i-1].y);
         }
     }
 }
 
-void Figure::move(int dx, int dy, bool **grid)
+void Figure::move(int dx, int dy, Block ***grid)
 {
     bool collide = false;
     for (int i = 0; i < 4; i++) {
-        if (_blocks[i].checkCollision(dx, dy, grid)) {
+        if (_blocks.at(i)->checkCollision(dx, dy, grid)) {
             collide = true;
             break;
         }
     }
     if (!collide) {
         for (int i = 0; i < 4; i++) {
-            _blocks[i].move(dx, dy);
+            _blocks.at(i)->move(dx, dy);
         }
         _pos.x += dx;
         _pos.y += dy;
@@ -61,15 +77,32 @@ void Figure::move(int dx, int dy, bool **grid)
     }
 }
 
-void Figure::update(bool **grid)
+void Figure::update(Block ***grid)
 {
     move(0, 1, grid);     // move down
 }
 
-void Figure::setBlocks(bool **grid)
+void Figure::checkDeadBlocks() {
+    // check for 'dead' blocks and erase them
+    auto it = _blocks.begin();
+    while (it != _blocks.end()) {
+        if (!(*it)->isAlive()) {
+            Block *aux = *it;
+            it = _blocks.erase(it);
+            delete aux;
+        } else {
+            it++;
+        }
+    }
+    if (_blocks.empty()) {
+        _alive = false;
+    }
+}
+
+void Figure::setBlocks(Block ***grid)
 {
-    for (int i = 0; i < 4; i++) {
-        position_t pos = _blocks[i].getPosition();
-        grid[pos.x][pos.y] = true;
+    for (Block *b : _blocks) {
+        position_t pos = b->getPosition();
+        grid[pos.y][pos.x] = b;
     }
 }
