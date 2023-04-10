@@ -22,6 +22,7 @@ class Figure {
         void update(Block ***grid);
         void checkDeadBlocks();
         bool isLanding() const { return _landing; }
+        bool isAlive() const { return _alive; }
         void setBlocks(Block ***grid);
 };
 

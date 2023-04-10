@@ -28,9 +28,10 @@ Tetris::Tetris()
         }
     }
     
-
+    next_figure = randomFigure();
     points = 0;
 }
+
 
 Tetris::~Tetris()
 {
@@ -40,7 +41,10 @@ Tetris::~Tetris()
     }
     delete[] grid;
 
-    delete active_figure;
+    delete next_figure;
+    for (Figure *f : figures) {
+        delete f;
+    }
     figures.clear();
 
     SDL_Quit();
@@ -118,12 +122,28 @@ void Tetris::handleInput()
 
 void Tetris::updateAll()
 {
+    // update active figure
     active_figure->update(grid);
+    // if figure lands, check for full lines
     if (active_figure->isLanding()) {
         active_figure->setBlocks(grid);
         checkLines();
-        for (Figure *f : figures) f->checkDeadBlocks();
+
+        // remove 'dead' blocks and figures
+        auto it = figures.begin();
+        while (it != figures.end()) {
+            (*it)->checkDeadBlocks();
+            if (!(*it)->isAlive()) {
+                Figure *aux = *it;
+                it = figures.erase(it);
+                delete aux;
+            } else {
+                it++;
+            }
+        }
+        // add new figure
         addFigure();
+
     }
 }
 
@@ -173,12 +193,11 @@ void Tetris::drawAll()
     renderer.renderText("TETRIS", 470, 50, FONTSIZE_LARGE, COLOR_YELLOW, true);
     renderer.renderText("SCORE", 470, 150, FONTSIZE_DEFAULT, COLOR_WHITE, true);
     renderer.renderText(std::to_string(points), 470, 200, FONTSIZE_DEFAULT, COLOR_WHITE, true);
-
     renderer.renderText("NEXT", 470, 300, FONTSIZE_DEFAULT, COLOR_WHITE, true);
+
 }
 
-
-void Tetris::addFigure()
+Figure *Tetris::randomFigure()
 {
     int random = rand() % 7;
     Figure *new_figure;
@@ -205,7 +224,13 @@ void Tetris::addFigure()
             new_figure = new TFigure();
             break;
     }
-    figures.push_front(new_figure);
-    active_figure = figures.front();
+    return new_figure;
+}
+
+void Tetris::addFigure()
+{
+    active_figure = next_figure;
+    figures.push_front(active_figure);
+    next_figure = randomFigure();
 }
 

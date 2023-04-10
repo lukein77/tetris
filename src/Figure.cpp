@@ -4,6 +4,7 @@
 Figure::Figure(position_t b1, position_t b2, position_t b3, position_t b4, SDL_Color color) :
     _pos(INIT_X, INIT_Y),
     _landing(false),
+    _alive(true),
     _blocks {
         new Block(b1.x+INIT_X, b1.y+INIT_Y, color),
         new Block(b2.x+INIT_X, b2.y+INIT_Y, color),

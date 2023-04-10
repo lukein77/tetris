@@ -24,6 +24,7 @@ class Tetris {
         void updateAll();
         void addFigure();
         void checkLines();
+        Figure *randomFigure();
     public:
         Tetris();
         ~Tetris();
