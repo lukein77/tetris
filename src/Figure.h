@@ -14,13 +14,13 @@ class Figure {
         bool _landing;
     public:
         Figure(position_t b1, position_t b2, position_t b3, position_t b4, SDL_Color color);
-        ~Figure() {}
+        ~Figure();
         void draw(Renderer &renderer);
-        void rotate(bool **grid);
-        void move(int dx, int dy, bool **grid);
-        void update(bool **grid);
+        void rotate(Block ***grid);
+        void move(int dx, int dy, Block ***grid);
+        void update(Block ***grid);
         bool isLanding() const { return _landing; }
-        void setBlocks(bool **grid);
+        void setBlocks(Block ***grid);
 };
 
 class Square : public Figure {

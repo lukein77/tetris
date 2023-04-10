@@ -12,6 +12,14 @@ Figure::Figure(position_t b1, position_t b2, position_t b3, position_t b4, SDL_C
     }
 {}
 
+Figure::~Figure()
+{
+    for (Block *b : _blocks) {
+        delete b;
+    }
+    _blocks.clear();
+}
+
 void Figure::draw(Renderer &renderer)
 {
     for (Block *b : _blocks) {
@@ -19,7 +27,7 @@ void Figure::draw(Renderer &renderer)
     }
 }
 
-void Figure::rotate(bool **grid)
+void Figure::rotate(Block ***grid)
 {
     position_t pivot = _blocks.at(0)->getPosition();
     position_t rotated_pos[3];
@@ -40,7 +48,7 @@ void Figure::rotate(bool **grid)
     }
 }
 
-void Figure::move(int dx, int dy, bool **grid)
+void Figure::move(int dx, int dy, Block ***grid)
 {
     bool collide = false;
     for (int i = 0; i < 4; i++) {
@@ -61,15 +69,15 @@ void Figure::move(int dx, int dy, bool **grid)
     }
 }
 
-void Figure::update(bool **grid)
+void Figure::update(Block ***grid)
 {
     move(0, 1, grid);     // move down
 }
 
-void Figure::setBlocks(bool **grid)
+void Figure::setBlocks(Block ***grid)
 {
     for (Block *b : _blocks) {
         position_t pos = b->getPosition();
-        grid[pos.x][pos.y] = true;
+        grid[pos.y][pos.x] = b;
     }
 }

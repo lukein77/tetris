@@ -13,10 +13,20 @@ Tetris::Tetris()
     srand(time(0));
 
     // allocate memory for the grid
-    grid = new bool*[GRID_HEIGHT];
+    grid = new Block**[GRID_HEIGHT];
     for (int i = 0; i < GRID_HEIGHT; i++) {
-        grid[i] = new bool[GRID_WIDTH];
+        grid[i] = new Block*[GRID_WIDTH];
+        std::cout << i << std::endl;
     }
+    
+    // set every cell to nullptr
+    for (int i = 0; i < GRID_HEIGHT; i++) {
+        for (int j = 0; j < GRID_WIDTH; j++) {
+            grid[i][j] = nullptr;
+            std::cout << i << ", " << j << std::endl;
+        }
+    }
+    
 
     points = 0;
 }
@@ -41,6 +51,12 @@ void Tetris::mainLoop()
 
     unsigned int framesPassed = 0;
     
+     
+    for (int i = 0; i < GRID_HEIGHT; i++) {
+        for (int j = 0; j < GRID_WIDTH; j++) {
+            std::cout << i << ", " << j << ": " << grid[i][j] << std::endl;
+        }
+    }
     while (running) {
         Uint64 start = SDL_GetTicks64();
 

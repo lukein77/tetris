@@ -14,7 +14,7 @@ class Tetris {
         bool running;
         std::list<Figure*> figures;
         Figure* active_figure;
-        bool **grid;
+        Block ***grid;
         int points;
 
         void handleEvents();
