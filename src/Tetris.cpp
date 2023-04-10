@@ -55,19 +55,22 @@ void Tetris::mainLoop()
     addFigure();
 
     unsigned int framesPassed = 0;
-    
+    Uint64 handleInput_time = 0;
+    Uint64 update_time = 0;
     
     while (running) {
         Uint64 start = SDL_GetTicks64();
 
         handleEvents();
 
-        if (framesPassed % 5 == 0) {
+        if (SDL_GetTicks64() >= handleInput_time + 50) {
             handleInput();
+            handleInput_time = SDL_GetTicks64();
         }
 
-        if (framesPassed % 15 == 0) {
+        if (SDL_GetTicks64() >= update_time + 200) {
             updateAll();
+            update_time = SDL_GetTicks64();
         }
 
         renderer.clearScene();
