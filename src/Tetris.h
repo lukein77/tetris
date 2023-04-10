@@ -13,7 +13,8 @@ class Tetris {
         Renderer renderer;
         bool running;
         std::list<Figure*> figures;
-        Figure* active_figure;
+        Figure *active_figure;
+        Figure *next_figure;
         Block ***grid;
         int points;
 

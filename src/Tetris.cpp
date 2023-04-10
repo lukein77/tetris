@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
+#include <cmath>
 
 Tetris::Tetris()
 {
@@ -23,7 +24,7 @@ Tetris::Tetris()
     for (int i = 0; i < GRID_HEIGHT; i++) {
         for (int j = 0; j < GRID_WIDTH; j++) {
             grid[i][j] = nullptr;
-            std::cout << i << ", " << j << std::endl;
+            //std::cout << i << ", " << j << std::endl;
         }
     }
     
@@ -51,12 +52,7 @@ void Tetris::mainLoop()
 
     unsigned int framesPassed = 0;
     
-     
-    for (int i = 0; i < GRID_HEIGHT; i++) {
-        for (int j = 0; j < GRID_WIDTH; j++) {
-            std::cout << i << ", " << j << ": " << grid[i][j] << std::endl;
-        }
-    }
+    
     while (running) {
         Uint64 start = SDL_GetTicks64();
 
@@ -125,6 +121,8 @@ void Tetris::updateAll()
     active_figure->update(grid);
     if (active_figure->isLanding()) {
         active_figure->setBlocks(grid);
+        checkLines();
+        for (Figure *f : figures) f->checkDeadBlocks();
         addFigure();
     }
 }
@@ -132,12 +130,12 @@ void Tetris::updateAll()
 void Tetris::checkLines()
 {
     int total_lines = 0;
-    bool full_line = true;
     for (int i = GRID_HEIGHT-1; i >= 0; i--) {
+        bool full_line = true;
         // check if line is full
 
         for (int j = 0; j < GRID_WIDTH; j++) {
-            if (!grid[i][j]) {
+            if (grid[i][j] == nullptr) {
                 full_line = false;
                 break;
             }
@@ -147,12 +145,22 @@ void Tetris::checkLines()
             // if line is not full, move that line down as many times as lines filled previously
             if (total_lines > 0) {
                 for (int j = 0; j < GRID_WIDTH; j++) {
-                    grid[i-total_lines][j] = grid[i][j];
+                    if (grid[i][j]) grid[i][j]->setPosition(j, i+total_lines);  // update block position
+                    grid[i+total_lines][j] = grid[i][j];        // update grid
                 }
             }
         } else {
-            total_lines++;  // count full line and move to the next
+            // set alive = false to all blocks
+            for (int j = 0; j < GRID_WIDTH; j++) {
+                grid[i][j]->erase();
+            }
+            // count full line and move to the next
+            total_lines++;  
         }
+    }
+    // add points
+    if (total_lines > 0) {
+        points += pow(2.0, total_lines-1) * 100;
     }
 }
 
@@ -162,6 +170,11 @@ void Tetris::drawAll()
     for (Figure *f : figures) {
         f->draw(renderer);
     }
+    renderer.renderText("TETRIS", 470, 50, FONTSIZE_LARGE, COLOR_YELLOW, true);
+    renderer.renderText("SCORE", 470, 150, FONTSIZE_DEFAULT, COLOR_WHITE, true);
+    renderer.renderText(std::to_string(points), 470, 200, FONTSIZE_DEFAULT, COLOR_WHITE, true);
+
+    renderer.renderText("NEXT", 470, 300, FONTSIZE_DEFAULT, COLOR_WHITE, true);
 }
 
 

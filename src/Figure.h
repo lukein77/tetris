@@ -12,6 +12,7 @@ class Figure {
         std::vector<Block*> _blocks;
         SDL_Color _color;
         bool _landing;
+        bool _alive;
     public:
         Figure(position_t b1, position_t b2, position_t b3, position_t b4, SDL_Color color);
         ~Figure();
@@ -19,6 +20,7 @@ class Figure {
         void rotate(Block ***grid);
         void move(int dx, int dy, Block ***grid);
         void update(Block ***grid);
+        void checkDeadBlocks();
         bool isLanding() const { return _landing; }
         void setBlocks(Block ***grid);
 };

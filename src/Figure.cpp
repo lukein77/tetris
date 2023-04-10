@@ -74,6 +74,23 @@ void Figure::update(Block ***grid)
     move(0, 1, grid);     // move down
 }
 
+void Figure::checkDeadBlocks() {
+    // check for 'dead' blocks and erase them
+    auto it = _blocks.begin();
+    while (it != _blocks.end()) {
+        if (!(*it)->isAlive()) {
+            Block *aux = *it;
+            it = _blocks.erase(it);
+            delete aux;
+        } else {
+            it++;
+        }
+    }
+    if (_blocks.empty()) {
+        _alive = false;
+    }
+}
+
 void Figure::setBlocks(Block ***grid)
 {
     for (Block *b : _blocks) {
