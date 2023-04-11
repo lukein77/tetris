@@ -8,28 +8,30 @@ Tetris::Tetris()
 {
     if (renderer.initialize()) {
         running = true;
+        
+        srand(time(0));
+
+        game_over = false;
+
+        // allocate memory for the grid
+        grid = new Block**[GRID_HEIGHT];
+        for (int i = 0; i < GRID_HEIGHT; i++) {
+            grid[i] = new Block*[GRID_WIDTH];
+        }
+        
+        // set every cell to nullptr
+        for (int i = 0; i < GRID_HEIGHT; i++) {
+            for (int j = 0; j < GRID_WIDTH; j++) {
+                grid[i][j] = nullptr;
+            }
+        }
+        
+        next_figure = randomFigure();
+        points = 0;
+
     } else {
         running = false;
     }
-    srand(time(0));
-
-    // allocate memory for the grid
-    grid = new Block**[GRID_HEIGHT];
-    for (int i = 0; i < GRID_HEIGHT; i++) {
-        grid[i] = new Block*[GRID_WIDTH];
-        std::cout << i << std::endl;
-    }
-    
-    // set every cell to nullptr
-    for (int i = 0; i < GRID_HEIGHT; i++) {
-        for (int j = 0; j < GRID_WIDTH; j++) {
-            grid[i][j] = nullptr;
-            //std::cout << i << ", " << j << std::endl;
-        }
-    }
-    
-    next_figure = randomFigure();
-    points = 0;
 }
 
 
@@ -73,11 +75,7 @@ void Tetris::mainLoop()
             update_time = SDL_GetTicks64();
         }
 
-        renderer.clearScene();
-
         drawAll();
-
-        renderer.renderScene();
 
         // fps
         Uint64 timePassed = SDL_GetTicks64() - start;
@@ -85,6 +83,10 @@ void Tetris::mainLoop()
             SDL_Delay(1000 / 60.0 - timePassed);
         }
         framesPassed++;
+    }
+    if (game_over) {
+        // Make the player look at the Game Over message and think about their mistakes
+        SDL_Delay(3000);
     }
 }
 
@@ -131,24 +133,28 @@ void Tetris::updateAll()
     active_figure->update(grid);
     // if figure lands, check for full lines
     if (active_figure->isLanding()) {
-        active_figure->setBlocks(grid);
-        checkLines();
+        if (active_figure->setBlocks(grid)) {
+            checkLines();
 
-        // remove 'dead' blocks and figures
-        auto it = figures.begin();
-        while (it != figures.end()) {
-            (*it)->checkDeadBlocks();
-            if (!(*it)->isAlive()) {
-                Figure *aux = *it;
-                it = figures.erase(it);
-                delete aux;
-            } else {
-                it++;
+            // remove 'dead' blocks and figures
+            auto it = figures.begin();
+            while (it != figures.end()) {
+                (*it)->checkDeadBlocks();
+                if (!(*it)->isAlive()) {
+                    Figure *aux = *it;
+                    it = figures.erase(it);
+                    delete aux;
+                } else {
+                    it++;
+                }
             }
+            // add new figure
+            addFigure();
+        } else {
+            // figure did not land, player loses
+            std::cout << "GAME OVER\n";
+            game_over = true;
         }
-        // add new figure
-        addFigure();
-
     }
 }
 
@@ -191,15 +197,25 @@ void Tetris::checkLines()
 
 void Tetris::drawAll()
 {
+    renderer.clearScene();
+    // Render figures
     renderer.drawGrid();
     for (Figure *f : figures) {
         f->draw(renderer);
     }
+    // Render UI
     renderer.renderText("TETRIS", 470, 50, FONTSIZE_LARGE, COLOR_YELLOW, true);
     renderer.renderText("SCORE", 470, 150, FONTSIZE_DEFAULT, COLOR_WHITE, true);
     renderer.renderText(std::to_string(points), 470, 200, FONTSIZE_DEFAULT, COLOR_WHITE, true);
     renderer.renderText("NEXT", 470, 300, FONTSIZE_DEFAULT, COLOR_WHITE, true);
     next_figure->drawAsNext(renderer);
+    
+    if (game_over) {
+        renderer.renderGameOver();
+        running = false;
+    }
+    renderer.renderScene();
+
 }
 
 Figure *Tetris::randomFigure()

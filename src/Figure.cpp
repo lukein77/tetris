@@ -1,5 +1,5 @@
 #include "Figure.h"
-
+#include <iostream>
 
 Figure::Figure(position_t b1, position_t b2, position_t b3, position_t b4, SDL_Color color) :
     _pos(INIT_X, INIT_Y),
@@ -99,10 +99,12 @@ void Figure::checkDeadBlocks() {
     }
 }
 
-void Figure::setBlocks(Block ***grid)
+bool Figure::setBlocks(Block ***grid)
 {
     for (Block *b : _blocks) {
         position_t pos = b->getPosition();
+        if (pos.y < 0) return false;
         grid[pos.y][pos.x] = b;
     }
+    return true;
 }

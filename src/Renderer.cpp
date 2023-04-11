@@ -106,3 +106,19 @@ void Renderer::renderText(std::string text, int x, int y, int size, SDL_Color co
 		printf("Error rendering text: %s\n", TTF_GetError());
 	}
 }
+
+void Renderer::renderGameOver() {
+
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x80);
+    
+    SDL_Rect r;
+    r.w = GRID_WIDTH * BLOCK_SIZE;
+    r.h = GRID_HEIGHT * BLOCK_SIZE;
+    r.x = 0;
+    r.y = 0;
+    
+    SDL_RenderFillRect(renderer, &r);
+
+    renderText("GAME OVER", GRID_WIDTH / 2 * BLOCK_SIZE, GRID_HEIGHT / 2 * BLOCK_SIZE, FONTSIZE_DEFAULT, COLOR_WHITE, true);
+}

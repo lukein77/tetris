@@ -12,6 +12,7 @@ class Tetris {
     private:
         Renderer renderer;
         bool running;
+        bool game_over;
         std::list<Figure*> figures;
         Figure *active_figure;
         Figure *next_figure;

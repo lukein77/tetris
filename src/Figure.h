@@ -24,7 +24,7 @@ class Figure {
         void checkDeadBlocks();
         bool isLanding() const { return _landing; }
         bool isAlive() const { return _alive; }
-        void setBlocks(Block ***grid);
+        bool setBlocks(Block ***grid);
 };
 
 class Square : public Figure {

@@ -21,6 +21,7 @@ class Renderer {
         void drawGrid();
         void blit(Texture *texture, int x, int y);
         void renderText(std::string text, int x, int y, int size, SDL_Color color, bool centered=false);
+        void renderGameOver();
 };
 
 #endif
