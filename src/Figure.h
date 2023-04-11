@@ -29,7 +29,7 @@ class Figure {
 
 class Square : public Figure {
     public:
-        Square() : Figure({0,0}, {0,-1}, {1,-1}, {1,0}, COLOR_RED) {}
+        Square() : Figure({0,0}, {0,-1}, {-1,-1}, {-1,0}, COLOR_RED) {}
 };
 
 class Line : public Figure {

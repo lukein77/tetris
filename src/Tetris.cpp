@@ -56,7 +56,6 @@ void Tetris::mainLoop()
 {
     addFigure();
 
-    unsigned int framesPassed = 0;
     Uint64 handleInput_time = 0;
     Uint64 update_time = 0;
     
@@ -82,7 +81,6 @@ void Tetris::mainLoop()
         if (timePassed < 1000 / 60.0) {
             SDL_Delay(1000 / 60.0 - timePassed);
         }
-        framesPassed++;
     }
     if (game_over) {
         // Make the player look at the Game Over message and think about their mistakes
@@ -214,6 +212,7 @@ void Tetris::drawAll()
         renderer.renderGameOver();
         running = false;
     }
+
     renderer.renderScene();
 
 }

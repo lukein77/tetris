@@ -23,6 +23,8 @@ class Block {
         void erase() { _alive = false; }
         void setPosition(int x, int y) { _x = x; _y = y;}
         position_t getPosition() const { return position_t(_x, _y); }
+        int getX() const { return _x; }
+        int getY() const { return _y; }
         position_t rotate(position_t pivot);
         const bool isAlive() const { return _alive; }
 };

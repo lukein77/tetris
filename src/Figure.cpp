@@ -101,9 +101,12 @@ void Figure::checkDeadBlocks() {
 
 bool Figure::setBlocks(Block ***grid)
 {
+    if (_blocks.at(0)->getX() == INIT_X && _blocks.at(0)->getY() == INIT_Y) {
+        // the figure landed in the same place it appeared, that means game over
+        return false;
+    }
     for (Block *b : _blocks) {
         position_t pos = b->getPosition();
-        if (pos.y < 0) return false;
         grid[pos.y][pos.x] = b;
     }
     return true;
