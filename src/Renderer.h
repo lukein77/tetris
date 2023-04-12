@@ -19,7 +19,7 @@ class Renderer {
         void clearScene();
         void renderScene();
         void drawSquare(int x, int y, SDL_Color color, bool fill=false);
-        void drawBlock(int x, int y, Color color);
+        void drawBlock(float x, float y, Color color);
         void drawGrid();
         void blit(Texture *texture, int x, int y);
         void renderText(std::string text, int x, int y, int size, SDL_Color color, bool centered=false);

@@ -4,15 +4,15 @@
 #include <SDL2/SDL.h>
 
 #define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 600
+#define SCREEN_HEIGHT 663
 
 #define GRID_WIDTH 10
 #define GRID_HEIGHT 20
-#define BLOCK_SIZE 30
+#define BLOCK_SIZE 36
 #define INIT_X 5
 #define INIT_Y 1
-#define NEXTFIGURE_OFFSET_X 10
-#define NEXTFIGURE_OFFSET_Y 13
+#define NEXTFIGURE_OFFSET_X 9.3
+#define NEXTFIGURE_OFFSET_Y 12
 
 #define COLOR_WHITE     {0xFF, 0xFF, 0xFF, 0xFF}
 #define COLOR_RED       {0xF2, 0x00, 0x00, 0xFF}

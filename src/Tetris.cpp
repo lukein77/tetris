@@ -70,7 +70,7 @@ void Tetris::mainLoop()
             handleInput_time = SDL_GetTicks64();
         }
 
-        int update_interval = (holding_down) ? 0 : 200;
+        int update_interval = (holding_down) ? 0 : 250;
         if (SDL_GetTicks64() >= update_time + update_interval) {
             updateAll();
             update_time = SDL_GetTicks64();
@@ -206,10 +206,10 @@ void Tetris::drawAll()
         f->draw(renderer);
     }
     // Render UI
-    renderer.renderText("TETRIS", 470, 50, FONTSIZE_LARGE, COLOR_YELLOW, true);
-    renderer.renderText("SCORE", 470, 150, FONTSIZE_DEFAULT, COLOR_WHITE, true);
-    renderer.renderText(std::to_string(points), 470, 200, FONTSIZE_DEFAULT, COLOR_WHITE, true);
-    renderer.renderText("NEXT", 470, 300, FONTSIZE_DEFAULT, COLOR_WHITE, true);
+    renderer.renderText("TETRIS", 480, 50, FONTSIZE_LARGE, COLOR_YELLOW, true);
+    renderer.renderText("SCORE", 480, 150, FONTSIZE_DEFAULT, COLOR_WHITE, true);
+    renderer.renderText(std::to_string(points), 480, 200, FONTSIZE_DEFAULT, COLOR_WHITE, true);
+    renderer.renderText("NEXT", 480, 330, FONTSIZE_DEFAULT, COLOR_WHITE, true);
     next_figure->drawAsNext(renderer);
     
     if (game_over) {

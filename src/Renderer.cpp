@@ -74,7 +74,7 @@ void Renderer::renderScene() {
 void Renderer::drawSquare(int x, int y, SDL_Color color, bool fill) {
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
     
-    SDL_Rect rect = {x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE-1, BLOCK_SIZE-1};
+    SDL_Rect rect = {x * 40, y * 40, 40, 40};
     
     if (fill) {
         SDL_RenderFillRect(renderer, &rect);
@@ -83,19 +83,24 @@ void Renderer::drawSquare(int x, int y, SDL_Color color, bool fill) {
     }
 }
 
-void Renderer::drawBlock(int x, int y, Color color)
+void Renderer::drawBlock(float x, float y, Color color)
 {
-    SDL_Rect rect = {x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE};
+    SDL_Rect rect = {(int) x * (BLOCK_SIZE-3), (int) y * (BLOCK_SIZE-3), BLOCK_SIZE, BLOCK_SIZE};
     SDL_RenderCopy(renderer, block_textures[color], NULL, &rect);
 }
 
 void Renderer::drawGrid() {
-    // grid
+    /*
     for (int i = 0; i < GRID_WIDTH; i++) {
         for (int j = 0; j < GRID_HEIGHT; j++) {
             drawSquare(i, j, {0x26, 0x26, 0x26, 0xFF});
         }
-    }
+    }*/
+    SDL_SetRenderDrawColor(renderer, 0x25, 0x25, 0x25, 0xFF);
+    SDL_Rect rect = {0, 0, GRID_WIDTH*(BLOCK_SIZE-3), GRID_HEIGHT*(BLOCK_SIZE)};
+    SDL_RenderFillRect(renderer, &rect);
+    drawSquare(50, 50, COLOR_RED, true);
+
 }
 
 void Renderer::blit(Texture *texture, int x, int y) {
