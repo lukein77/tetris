@@ -12,6 +12,7 @@ Tetris::Tetris()
         srand(time(0));
 
         game_over = false;
+        holding_down = false;
 
         // allocate memory for the grid
         grid = new Block**[GRID_HEIGHT];
@@ -69,7 +70,8 @@ void Tetris::mainLoop()
             handleInput_time = SDL_GetTicks64();
         }
 
-        if (SDL_GetTicks64() >= update_time + 200) {
+        int update_interval = (holding_down) ? 0 : 200;
+        if (SDL_GetTicks64() >= update_time + update_interval) {
             updateAll();
             update_time = SDL_GetTicks64();
         }
@@ -90,7 +92,7 @@ void Tetris::mainLoop()
 
 void Tetris::handleEvents()
 {
-    SDL_Event event;
+    SDL_Event event; 
 
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
@@ -120,9 +122,10 @@ void Tetris::handleInput()
     else if (keyboard[SDL_SCANCODE_RIGHT]) {
         active_figure->move(1,0, grid);
     }
-    else if (keyboard[SDL_SCANCODE_DOWN]) {
+    /*else if (keyboard[SDL_SCANCODE_DOWN]) {
         active_figure->move(0,1, grid);
-    }
+    }*/
+    holding_down = keyboard[SDL_SCANCODE_DOWN];
 }
 
 void Tetris::updateAll()
@@ -147,6 +150,7 @@ void Tetris::updateAll()
                 }
             }
             // add new figure
+            SDL_Delay(250);
             addFigure();
         } else {
             // figure did not land, player loses

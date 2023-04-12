@@ -1,7 +1,7 @@
 #include "Figure.h"
 #include <iostream>
 
-Figure::Figure(position_t b1, position_t b2, position_t b3, position_t b4, SDL_Color color) :
+Figure::Figure(position_t b1, position_t b2, position_t b3, position_t b4, Color color) :
     _pos(INIT_X, INIT_Y),
     _landing(false),
     _alive(true),

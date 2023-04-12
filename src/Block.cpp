@@ -8,12 +8,12 @@ void Block::move(int dx, int dy)
 
 void Block::draw(Renderer &renderer)
 {
-    renderer.drawSquare(_x, _y, _color, true);
+    renderer.drawBlock(_x, _y, _color);
 }
 
 void Block::drawAsNext(Renderer &renderer)
 {
-    renderer.drawSquare(_x + NEXTFIGURE_OFFSET_X, _y + NEXTFIGURE_OFFSET_Y, _color, true);
+    renderer.drawBlock(_x + NEXTFIGURE_OFFSET_X, _y + NEXTFIGURE_OFFSET_Y, _color);
 }
 
 position_t Block::rotate(position_t pivot)

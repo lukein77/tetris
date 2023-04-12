@@ -1,11 +1,18 @@
 #include "Renderer.h"
+#include <SDL2/SDL_image.h>
 
 Renderer::Renderer() {}
 
 Renderer::~Renderer() {
-    TTF_Quit();
+    for (int i = 0; i < 3; i++) {
+        TTF_CloseFont(fonts[i]);
+    }
+
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+
+    TTF_Quit();
+    IMG_Quit();
 }
 
 bool Renderer::initialize() {
@@ -14,7 +21,7 @@ bool Renderer::initialize() {
         return false;
     }
 
-    window = SDL_CreateWindow("EL TRETIRS", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow("TETRIS", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     if (!window) {
         printf("Failed to open window: %s\n", SDL_GetError());
         return false;
@@ -34,10 +41,21 @@ bool Renderer::initialize() {
 		printf("Failed to initialize SDL_ttf: %s\n", TTF_GetError());
 		return false;
 	} else {
-		fonts[FONTSIZE_DEFAULT] = TTF_OpenFont("data/PressStart2P.ttf", 18);
-        fonts[FONTSIZE_SMALL] = TTF_OpenFont("data/PressStart2P.ttf", 14);
-        fonts[FONTSIZE_LARGE] = TTF_OpenFont("data/PressStart2P.ttf", 36);
+		fonts[FONTSIZE_DEFAULT] = TTF_OpenFont("graphics/PressStart2P.ttf", 18);
+        fonts[FONTSIZE_SMALL] = TTF_OpenFont("graphics/PressStart2P.ttf", 14);
+        fonts[FONTSIZE_LARGE] = TTF_OpenFont("graphics/PressStart2P.ttf", 36);
 	}
+
+    int imgFlags = IMG_INIT_PNG;
+    if(!(IMG_Init(imgFlags) & imgFlags)) {
+        printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
+        return false;
+    }
+
+    for (int i = 0; i < 7; i++) {
+        block_textures[i] = loadTexture("graphics/block_"+std::to_string(i)+".png");
+        if (!block_textures[i]) return false;
+    }
     
     return true;
 }
@@ -56,24 +74,26 @@ void Renderer::renderScene() {
 void Renderer::drawSquare(int x, int y, SDL_Color color, bool fill) {
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
     
-    SDL_Rect r;
-    r.w = BLOCK_SIZE;
-    r.h = BLOCK_SIZE;
-    r.x = x * BLOCK_SIZE;
-    r.y = y * BLOCK_SIZE;
+    SDL_Rect rect = {x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE-1, BLOCK_SIZE-1};
     
     if (fill) {
-        SDL_RenderFillRect(renderer, &r);
+        SDL_RenderFillRect(renderer, &rect);
     } else {
-        SDL_RenderDrawRect(renderer, &r);
+        SDL_RenderDrawRect(renderer, &rect);
     }
+}
+
+void Renderer::drawBlock(int x, int y, Color color)
+{
+    SDL_Rect rect = {x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE};
+    SDL_RenderCopy(renderer, block_textures[color], NULL, &rect);
 }
 
 void Renderer::drawGrid() {
     // grid
     for (int i = 0; i < GRID_WIDTH; i++) {
         for (int j = 0; j < GRID_HEIGHT; j++) {
-            drawSquare(i, j, {0x5A, 0x5A, 0x5A, 0xFF});
+            drawSquare(i, j, {0x26, 0x26, 0x26, 0xFF});
         }
     }
 }
@@ -121,4 +141,24 @@ void Renderer::renderGameOver() {
     SDL_RenderFillRect(renderer, &r);
 
     renderText("GAME OVER", GRID_WIDTH / 2 * BLOCK_SIZE, GRID_HEIGHT / 2 * BLOCK_SIZE, FONTSIZE_DEFAULT, COLOR_WHITE, true);
+}
+
+SDL_Texture *Renderer::loadTexture(std::string filename)
+{
+    SDL_Texture *texture = NULL;
+
+    SDL_Surface *surface = IMG_Load(filename.c_str());
+    
+    if (surface == NULL) {
+        return nullptr;
+    }
+
+    texture = SDL_CreateTextureFromSurface(renderer, surface);
+    if (texture == NULL) {
+        return nullptr;
+    }
+
+    SDL_FreeSurface(surface);
+
+    return texture;
 }

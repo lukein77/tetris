@@ -13,6 +13,7 @@ class Tetris {
         Renderer renderer;
         bool running;
         bool game_over;
+        bool holding_down; 
         std::list<Figure*> figures;
         Figure *active_figure;
         Figure *next_figure;

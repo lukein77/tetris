@@ -9,12 +9,12 @@ class Block {
     private:
         int _x;
         int _y;
-        SDL_Color _color;
+        Color _color;
         bool _alive;
 
     public:
         Block() {}
-        Block(int x, int y, SDL_Color color) : _x(x), _y(y), _color(color), _alive(true) {}
+        Block(int x, int y, Color color) : _x(x), _y(y), _color(color), _alive(true) {}
         ~Block() {}
         bool checkCollision(int dx, int dy, Block ***grid);
         void move(int dx, int dy);

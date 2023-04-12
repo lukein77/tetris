@@ -23,6 +23,15 @@
 #define COLOR_GREEN     {0x2A, 0xDE, 0x23, 0xFF}
 #define COLOR_PURPLE    {0x75, 0x16, 0xFA, 0xFF}
 
+enum Color {
+    BLUE = 0,
+    RED,
+    LIGHT_BLUE,
+    ORANGE,
+    YELLOW,
+    GREEN,
+    PURPLE
+};
 
 enum FontSize {
     FONTSIZE_DEFAULT,

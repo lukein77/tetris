@@ -10,11 +10,11 @@ class Figure {
     protected:
         position_t _pos;
         std::vector<Block*> _blocks;
-        SDL_Color _color;
+        Color _color;
         bool _landing;
         bool _alive;
     public:
-        Figure(position_t b1, position_t b2, position_t b3, position_t b4, SDL_Color color);
+        Figure(position_t b1, position_t b2, position_t b3, position_t b4, Color color);
         ~Figure();
         void draw(Renderer &renderer);
         void drawAsNext(Renderer &renderer);
@@ -29,37 +29,37 @@ class Figure {
 
 class Square : public Figure {
     public:
-        Square() : Figure({0,0}, {0,-1}, {-1,-1}, {-1,0}, COLOR_RED) {}
+        Square() : Figure({0,0}, {0,-1}, {-1,-1}, {-1,0}, Color::RED) {}
 };
 
 class Line : public Figure {
     public:
-        Line() : Figure({0,0}, {-2,0}, {-1,0}, {1,0}, COLOR_BLUE) {}
+        Line() : Figure({0,0}, {-2,0}, {-1,0}, {1,0}, Color::BLUE) {}
 };
 
 class JFigure : public Figure {
     public:
-        JFigure() : Figure({0,0}, {0,-2}, {0,-1}, {-1,0}, COLOR_PURPLE) {}
+        JFigure() : Figure({0,0}, {0,-2}, {0,-1}, {-1,0}, Color::PURPLE) {}
 };
 
 class LFigure : public Figure {
     public:
-        LFigure() : Figure({0,0}, {0,-2}, {0,-1}, {1,0}, COLOR_YELLOW) {}
+        LFigure() : Figure({0,0}, {0,-2}, {0,-1}, {1,0}, Color::YELLOW) {}
 };
 
 class SFigure : public Figure {
     public:
-        SFigure() : Figure({0,0}, {-1,0}, {0,-1}, {1,-1}, COLOR_LIGHTBLUE) {}
+        SFigure() : Figure({0,0}, {-1,0}, {0,-1}, {1,-1}, Color::LIGHT_BLUE) {}
 };
 
 class ZFigure : public Figure {
     public:
-        ZFigure() : Figure({0,0}, {-1,-1}, {0,-1}, {1,0}, COLOR_GREEN) {}
+        ZFigure() : Figure({0,0}, {-1,-1}, {0,-1}, {1,0}, Color::GREEN) {}
 };
 
 class TFigure : public Figure {
     public:
-        TFigure() : Figure({0,0}, {-1,0}, {0,-1}, {1,0}, COLOR_ORANGE) {}
+        TFigure() : Figure({0,0}, {-1,0}, {0,-1}, {1,0}, Color::ORANGE) {}
 };
 
 
