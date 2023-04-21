@@ -34,7 +34,7 @@ class Square : public Figure {
 
 class Line : public Figure {
     public:
-        Line() : Figure({0,0}, {-2,0}, {-1,0}, {1,0}, Color::BLUE) {}
+        Line() : Figure({0,-1}, {-2,-1}, {-1,-1}, {1,-1}, Color::BLUE) {}
 };
 
 class JFigure : public Figure {
