@@ -7,33 +7,29 @@
 /// @brief Initializes the Renderer object and other variables, allocates memory for the grid and sets every position to nullptr.
 Tetris::Tetris()
 {
-    if (renderer.initialize()) {
-        running = true;
-        
-        srand(time(0));
+    running = renderer.initialize() & mixer.initialize();
+    if (!running) return;
+    
+    srand(time(0));
 
-        game_over = false;
-        holding_down = false;
+    _state = PLAYING;
+    holding_down = false;
 
-        // allocate memory for the grid
-        grid = new Block**[GRID_HEIGHT];
-        for (int i = 0; i < GRID_HEIGHT; i++) {
-            grid[i] = new Block*[GRID_WIDTH];
-        }
-        
-        // set every cell to nullptr
-        for (int i = 0; i < GRID_HEIGHT; i++) {
-            for (int j = 0; j < GRID_WIDTH; j++) {
-                grid[i][j] = nullptr;
-            }
-        }
-        
-        next_figure = randomFigure();
-        points = 0;
-
-    } else {
-        running = false;
+    // allocate memory for the grid
+    grid = new Block**[GRID_HEIGHT];
+    for (int i = 0; i < GRID_HEIGHT; i++) {
+        grid[i] = new Block*[GRID_WIDTH];
     }
+    
+    // set every cell to nullptr
+    for (int i = 0; i < GRID_HEIGHT; i++) {
+        for (int j = 0; j < GRID_WIDTH; j++) {
+            grid[i][j] = nullptr;
+        }
+    }
+    
+    next_figure = randomFigure();
+    points = 0;
 }
 
 
@@ -68,15 +64,17 @@ void Tetris::mainLoop()
 
         handleEvents();
 
-        if (SDL_GetTicks64() >= handleInput_time + 50) {
-            handleInput();
-            handleInput_time = SDL_GetTicks64();
-        }
-
-        int update_interval = (holding_down) ? 0 : 250;
-        if (SDL_GetTicks64() >= update_time + update_interval) {
-            updateAll();
-            update_time = SDL_GetTicks64();
+        if (_state == PLAYING) {
+            if (SDL_GetTicks64() >= handleInput_time + 50) {
+                handleKeyPressed();
+                handleInput_time = SDL_GetTicks64();
+            }
+            
+            int update_interval = (holding_down) ? 0 : 250;
+            if (SDL_GetTicks64() >= update_time + update_interval) {
+                updateAll();
+                update_time = SDL_GetTicks64();
+            }
         }
 
         drawAll();
@@ -87,11 +85,12 @@ void Tetris::mainLoop()
             SDL_Delay(1000 / 60.0 - timePassed);
         }
     }
-    if (game_over) {
+    if (_state == GAME_OVER) {
         // Make the player look at the Game Over message and think about their mistakes
         SDL_Delay(3000);
     }
 }
+
 
 /// @brief Handles user events such as closing the window or pressing a key.
 void Tetris::handleEvents()
@@ -104,8 +103,8 @@ void Tetris::handleEvents()
                 running = false;
                 break;
             case SDL_KEYUP:
-                if (event.key.keysym.scancode == SDL_SCANCODE_UP) {
-                    active_figure->rotate(grid);
+                if (_state != GAME_OVER) {
+                    handleKeyUp(event.key.keysym.scancode);
                 }
                 break;
             default:
@@ -115,22 +114,28 @@ void Tetris::handleEvents()
 }
 
 /// @brief Handles keyboard input.
-void Tetris::handleInput()
+void Tetris::handleKeyPressed()
 {
     const Uint8 *keyboard = SDL_GetKeyboardState(NULL);
-    if (keyboard[SDL_SCANCODE_ESCAPE]) {
-        running = false;
-    }
     if (keyboard[SDL_SCANCODE_LEFT]) {
         active_figure->move(-1,0, grid);
     }
     else if (keyboard[SDL_SCANCODE_RIGHT]) {
         active_figure->move(1,0, grid);
     }
-    /*else if (keyboard[SDL_SCANCODE_DOWN]) {
-        active_figure->move(0,1, grid);
-    }*/
+
     holding_down = keyboard[SDL_SCANCODE_DOWN];
+}
+
+void Tetris::handleKeyUp(SDL_Scancode key)
+{
+    if (key == SDL_SCANCODE_ESCAPE) {
+        _state = (_state == PLAYING) ? PAUSE : PLAYING;
+    }
+    else if (key == SDL_SCANCODE_UP) {
+        if (_state == PLAYING)
+            active_figure->rotate(grid);
+    }
 }
 
 /// @brief Main game logic is done in this function. 
@@ -162,7 +167,7 @@ void Tetris::updateAll()
         } else {
             // figure did not land, player loses
             std::cout << "GAME OVER\n";
-            game_over = true;
+            _state = GAME_OVER;
         }
     }
 }
@@ -202,6 +207,9 @@ void Tetris::checkLines()
     // add points
     if (total_lines > 0) {
         points += pow(2.0, total_lines-1) * 100;
+        mixer.playLineSound();
+    } else {
+        mixer.playLandSound();
     }
 }
 
@@ -221,9 +229,12 @@ void Tetris::drawAll()
     renderer.renderText("NEXT", 480, 330, FONTSIZE_DEFAULT, COLOR_WHITE, true);
     next_figure->drawAsNext(renderer);
     
-    if (game_over) {
-        renderer.renderGameOver();
+    if (_state == GAME_OVER) {
+        renderer.renderMessage("GAME OVER");
         running = false;
+    }
+    else if (_state == PAUSE) {
+        renderer.renderMessage("PAUSED");
     }
 
     renderer.renderScene();

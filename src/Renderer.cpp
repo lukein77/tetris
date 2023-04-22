@@ -147,7 +147,9 @@ void Renderer::renderText(std::string text, int x, int y, int size, SDL_Color co
 	}
 }
 
-void Renderer::renderGameOver() {
+/// @brief Display a message over the grid. Used for "GAME OVER" or "PAUSE" messages.
+/// @param text Text to display
+void Renderer::renderMessage(std::string text) {
 
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
     SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x80);
@@ -160,7 +162,7 @@ void Renderer::renderGameOver() {
     
     SDL_RenderFillRect(renderer, &r);
 
-    renderText("GAME OVER", GRID_WIDTH / 2 * BLOCK_SIZE, GRID_HEIGHT / 2 * BLOCK_SIZE, FONTSIZE_DEFAULT, COLOR_WHITE, true);
+    renderText(text, GRID_WIDTH / 2 * BLOCK_SIZE, GRID_HEIGHT / 2 * BLOCK_SIZE, FONTSIZE_DEFAULT, COLOR_WHITE, true);
 }
 
 SDL_Texture *Renderer::loadTexture(std::string filename)

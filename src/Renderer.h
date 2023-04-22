@@ -23,7 +23,7 @@ class Renderer {
         void drawGrid();
         void blit(Texture *texture, int x, int y);
         void renderText(std::string text, int x, int y, int size, SDL_Color color, bool centered=false);
-        void renderGameOver();
+        void renderMessage(std::string text);
 
         SDL_Texture *loadTexture(std::string);
         void renderTexture(SDL_Texture *texture, int x, int y);
