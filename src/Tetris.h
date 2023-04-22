@@ -8,9 +8,16 @@
 #include "Figure.h"
 #include <list>
 
+enum State {
+    PLAYING,
+    PAUSE,
+    GAME_OVER
+};
+
 class Tetris {
     private:
         Renderer renderer;
+        State _state;
         bool running;
         bool game_over;
         bool holding_down; 

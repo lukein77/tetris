@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cmath>
 
+/// @brief Initializes the Renderer object and other variables, allocates memory for the grid and sets every position to nullptr.
 Tetris::Tetris()
 {
     if (renderer.initialize()) {
@@ -36,6 +37,7 @@ Tetris::Tetris()
 }
 
 
+/// @brief Deallocates memory and quits SDL.
 Tetris::~Tetris()
 {
     // deallocate memory for grid matrix
@@ -53,6 +55,7 @@ Tetris::~Tetris()
     SDL_Quit();
 }
 
+/// @brief Main game loop. All logic and rendering functions are called from here.
 void Tetris::mainLoop()
 {
     addFigure();
@@ -90,6 +93,7 @@ void Tetris::mainLoop()
     }
 }
 
+/// @brief Handles user events such as closing the window or pressing a key.
 void Tetris::handleEvents()
 {
     SDL_Event event; 
@@ -110,6 +114,7 @@ void Tetris::handleEvents()
     }
 }
 
+/// @brief Handles keyboard input.
 void Tetris::handleInput()
 {
     const Uint8 *keyboard = SDL_GetKeyboardState(NULL);
@@ -128,6 +133,8 @@ void Tetris::handleInput()
     holding_down = keyboard[SDL_SCANCODE_DOWN];
 }
 
+/// @brief Main game logic is done in this function. 
+//         Updates the active figure and checks for lines if the figure lands, and checks for game over.
 void Tetris::updateAll()
 {
     // update active figure
@@ -160,6 +167,7 @@ void Tetris::updateAll()
     }
 }
 
+/// @brief Checks if one or more lines have been completed and updates the grid accordingly.
 void Tetris::checkLines()
 {
     int total_lines = 0;
@@ -197,6 +205,7 @@ void Tetris::checkLines()
     }
 }
 
+/// @brief Draws every element: background, figures and UI.
 void Tetris::drawAll()
 {
     renderer.clearScene();
@@ -221,6 +230,8 @@ void Tetris::drawAll()
 
 }
 
+/// @brief Calculates a random number between 0 and 6 and uses it to generate a random figure.
+/// @return Pointer to a Figure object
 Figure *Tetris::randomFigure()
 {
     int random = rand() % 7;
@@ -251,6 +262,7 @@ Figure *Tetris::randomFigure()
     return new_figure;
 }
 
+/// @brief Adds a random figure and generates the next one.
 void Tetris::addFigure()
 {
     active_figure = next_figure;
