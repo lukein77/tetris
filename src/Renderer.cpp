@@ -15,6 +15,9 @@ Renderer::~Renderer() {
     IMG_Quit();
 }
 
+
+/// @brief Initializes SDL library, creates the window, loads fonts and block textures
+/// @return True if initialization was successfull, false if not
 bool Renderer::initialize() {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         printf("Couldn't initialize SDL: %s\n", SDL_GetError());
@@ -60,17 +63,24 @@ bool Renderer::initialize() {
     return true;
 }
 
+/// @brief Clears the scene by drawing a black background on top of everything
 void Renderer::clearScene() {
     // clear everything
     SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
     SDL_RenderClear(renderer);
 }
 
+/// @brief Update the screen and draw all elements
 void Renderer::renderScene() {
     // render everything
     SDL_RenderPresent(renderer);
 }
 
+/// @brief Draw a square of size BLOCK_SIZE.
+/// @param x position on the x axis
+/// @param y position on the y axis
+/// @param color the square's color
+/// @param fill filled square or not
 void Renderer::drawSquare(int x, int y, SDL_Color color, bool fill) {
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
     
@@ -83,12 +93,17 @@ void Renderer::drawSquare(int x, int y, SDL_Color color, bool fill) {
     }
 }
 
+/// @brief Draw a Tetris block on the corresponding position
+/// @param x position on the x axis
+/// @param y position on the y axis
+/// @param color block color
 void Renderer::drawBlock(float x, float y, Color color)
 {
     SDL_Rect rect = {(int) x * (BLOCK_SIZE-3), (int) y * (BLOCK_SIZE-3), BLOCK_SIZE, BLOCK_SIZE};
     SDL_RenderCopy(renderer, block_textures[color], NULL, &rect);
 }
 
+/// @brief Draw a background for rendering the Figures on top of it
 void Renderer::drawGrid() {
     /*
     for (int i = 0; i < GRID_WIDTH; i++) {
@@ -132,7 +147,9 @@ void Renderer::renderText(std::string text, int x, int y, int size, SDL_Color co
 	}
 }
 
-void Renderer::renderGameOver() {
+/// @brief Display a message over the grid. Used for "GAME OVER" or "PAUSE" messages.
+/// @param text Text to display
+void Renderer::renderMessage(std::string text) {
 
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
     SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x80);
@@ -145,7 +162,7 @@ void Renderer::renderGameOver() {
     
     SDL_RenderFillRect(renderer, &r);
 
-    renderText("GAME OVER", GRID_WIDTH / 2 * BLOCK_SIZE, GRID_HEIGHT / 2 * BLOCK_SIZE, FONTSIZE_DEFAULT, COLOR_WHITE, true);
+    renderText(text, GRID_WIDTH / 2 * BLOCK_SIZE, GRID_HEIGHT / 2 * BLOCK_SIZE, FONTSIZE_DEFAULT, COLOR_WHITE, true);
 }
 
 SDL_Texture *Renderer::loadTexture(std::string filename)

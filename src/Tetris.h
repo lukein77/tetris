@@ -5,12 +5,21 @@
 #include <SDL2/SDL_ttf.h>
 #include "defs.h"
 #include "Renderer.h"
+#include "Audio.h"
 #include "Figure.h"
 #include <list>
+
+enum State {
+    PLAYING,
+    PAUSE,
+    GAME_OVER
+};
 
 class Tetris {
     private:
         Renderer renderer;
+        Audio mixer;
+        State _state;
         bool running;
         bool game_over;
         bool holding_down; 
@@ -21,7 +30,8 @@ class Tetris {
         int points;
 
         void handleEvents();
-        void handleInput();
+        void handleKeyPressed();
+        void handleKeyUp(SDL_Scancode key);
         void drawAll();
         void updateAll();
         void addFigure();
@@ -32,6 +42,7 @@ class Tetris {
         ~Tetris();
         bool isRunning() { return running; }
         void mainLoop();
+        void changeState(State state);
 };
 
 
